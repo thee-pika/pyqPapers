@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String     @id @default(uuid())
+  username      String
+  email         String
+  role          RoleType   @default(user)
+  password      String
+  refresh_token String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime
+  PyqPapers     PyqPaper[]
+}
+
+model PyqPaper {
+  id       String      @id @default(uuid())
+  title    String
+  year     Int
+  type     DegreeType
+  semester String
+  group    GroupType
+  subject  SubjectType
+  userId   String
+  user     User        @relation(fields: [userId], references: [id])
+}
+
+enum GroupType {
+  BSC
+  BCom
+  BA
+  MSc
+  MA
+  MBA
+  PhD
+  Diploma
+}
+
+enum SubjectType {
+  Mathematics_BSC
+  Physics_BSC
+  Chemistry_BSC
+  Biology_BSC
+  ComputerScience_BSC
+  Accounting_BCom
+  Economics_BCom
+  BusinessStudies_BCom
+  Finance_BCom
+  Taxation_BCom
+  History_BA
+  PoliticalScience_BA
+  Psychology_BA
+  Sociology_BA
+  EnglishLiterature_BA
+  Philosophy_MA
+  Linguistics_MA
+  FineArts_MA
+  Literature_MA
+  CulturalStudies_MA
+  Marketing_MBA
+  MachineLearning_PhD
+}
+
+enum RoleType {
+  user
+  admin
+}
+
+enum DegreeType {
+  underGraduation
+  postGraduation
+}

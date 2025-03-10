@@ -1,0 +1,22 @@
+{
+  "name": "types",
+  "module": "index.js",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./types": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "zod": "^3.24.2"
+  }
+}
