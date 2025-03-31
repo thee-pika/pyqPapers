@@ -5,11 +5,11 @@
   "main": "./src/index.ts",
   "private": true,
   "exports": {
-    "./client": "./src/index.ts"
+    "./client": "./dist/index.js"
   },
   "scripts": {
     "build": "bun install && prisma generate && tsc -b",
-    "dev": "node dist/index.js"
+    "dev": "tsc && node dist/index.js"
   },
   "devDependencies": {
     "@types/bun": "latest"

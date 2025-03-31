@@ -1,54 +1,58 @@
 import { z } from "zod";
 
-export const LoginSchema = z.object({
+export const signupSchema = z.object({
     username: z.string(),
     email: z.string().email(),
-    role: z.enum(["user", "admin"]),
+    password: z.string().min(6)
+})
+
+export const LoginSchema = z.object({
+    email: z.string().email(),
     password: z.string().min(6),
-    createdAt: z.date(),
-    updatedAt: z.date()
 })
 
 export const createPyqPaper = z.object({
     title: z.string(),
     year: z.number(),
-    type: z.enum([
-        "underGraduation",
-        "postGraduation"
+    semester: z.enum([
+        "SEM1",
+        "SEM2",
+        "SEM3",
+        "SEM4",
+        "SEM5",
+        "SEM6",
     ]),
-    semester: z.enum(["1", "2", "3", "4", "5", "6"]),
-    DegreeGroup: z.enum([
+    combination: z.enum([
         "BSC",
         "BCom",
+        "BBA",
         "BA",
-        "MSc",
-        "MA",
-        "MBA",
-        "PhD",
-        "Diploma"
+        "BZC",
+        "BCA",
+        "NCZ"
     ]),
     subject: z.enum([
         "Mathematics_BSC",
         "Physics_BSC",
         "Chemistry_BSC",
         "Biology_BSC",
-        "Computer Science_BSC",
+        "ComputerScience_BSC",
         "Accounting_BCom",
         "Economics_BCom",
-        "Business Studies_BCom",
+        "BusinessStudies_BCom",
         "Finance_BCom",
-        "Taxation_BCom", "History_BA",
-        "Political Science_BA",
+        "Taxation_BCom",
+         "History_BA",
+        "PoliticalScience_BA",
         "Psychology_BA",
         "Sociology_BA",
-        "English Literature_BA",
+        "EnglishLiterature_BA",
         "Philosophy_MA",
         "Linguistics_MA",
-        "Fine Arts_MA",
+        "FineArts_MA",
         "Literature_MA",
-        "Cultural Studies_MA",
+        "CulturalStudies_MA",
         "Marketing_MBA",
-        "Machine Learning_PhD",
+        "MachineLearning_PhD",
     ]),
-    userId: z.string()
 })

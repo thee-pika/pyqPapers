@@ -11,7 +11,7 @@ model User {
   id            String     @id @default(uuid())
   username      String
   email         String
-  role          RoleType   @default(user)
+  role          Role?   @default(User)
   password      String
   refresh_token String?
   createdAt     DateTime   @default(now())
@@ -20,26 +20,36 @@ model User {
 }
 
 model PyqPaper {
-  id       String      @id @default(uuid())
-  title    String
-  year     Int
-  type     DegreeType
-  semester String
-  group    GroupType
-  subject  SubjectType
-  userId   String
-  user     User        @relation(fields: [userId], references: [id])
+  id          String      @id @default(uuid())
+  title       String
+  year        Int
+  imageUrl    String?
+  psurl       String       
+  expiryDate  DateTime     
+  semester    Semester
+  combination Combination
+  subject     SubjectType
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
 }
 
-enum GroupType {
+enum Semester {
+  SEM1
+  SEM2
+  SEM3
+  SEM4
+  SEM5
+  SEM6
+}
+
+enum Combination {
   BSC
   BCom
+  BBA
   BA
-  MSc
-  MA
-  MBA
-  PhD
-  Diploma
+  BZC
+  BCA
+  NCZ
 }
 
 enum SubjectType {
@@ -67,12 +77,8 @@ enum SubjectType {
   MachineLearning_PhD
 }
 
-enum RoleType {
-  user
-  admin
+enum Role {
+  User
+  Admin
 }
 
-enum DegreeType {
-  underGraduation
-  postGraduation
-}

@@ -13,8 +13,7 @@
     "jsx": "react-jsx",
     "allowJs": true,
     // Bundler mode
-    "moduleResolution": "bundler",
-    "verbatimModuleSyntax": true,
+    "moduleResolution": "node",
     // Best practices
     "strict": true,
     "skipLibCheck": true,
