@@ -1,7 +1,7 @@
 import { prisma } from "db/client";
 import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { getRefreshTokens } from "../controller/userController";
+import { getRefreshTokens } from "../controller/userController.js";
 
 interface JwtPayloadCustom {
   userId: string;

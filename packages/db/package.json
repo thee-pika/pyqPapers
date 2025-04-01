@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "bun install && prisma generate && tsc -b",
-    "dev": "tsc && node dist/index.js"
+    "dev": "node dist/index.js"
   },
   "devDependencies": {
     "@types/bun": "latest"

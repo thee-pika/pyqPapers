@@ -4,9 +4,11 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "build-backend": "cd apps/backend && turbo run build --filter=backend",
+    "start-backend": "cd apps/backend && bun run start",
+    "build-frontend": "cd apps/frontend && turbo run build --filter=frontend",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
     "prettier": "^3.5.3",
