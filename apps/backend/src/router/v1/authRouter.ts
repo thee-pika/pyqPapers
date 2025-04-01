@@ -40,7 +40,7 @@ authRouter.post("/login", async (req, res) => {
 
   const { access_token, refresh_token } = createTokens(userExists.id);
 
-  await prisma.user.update({
+  const user = await prisma.user.update({
     where: {
       id: userExists.id,
     },
@@ -49,7 +49,7 @@ authRouter.post("/login", async (req, res) => {
     },
   });
 
-  res.json({ access_token });
+  res.json({ access_token , role: user.role});
 });
 
 authRouter.post("/signup", async (req, res) => {

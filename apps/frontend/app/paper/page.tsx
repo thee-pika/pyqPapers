@@ -75,6 +75,7 @@ const AllPapers = () => {
               <div className="flex w-full justify-between">
                 <p className="text-gray-500">Group: {paper.combination}</p>
                 <p className="text-gray-500">Year: {paper.year}</p>
+              
               </div>
             </div>
           </Link>

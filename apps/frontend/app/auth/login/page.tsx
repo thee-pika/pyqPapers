@@ -28,10 +28,10 @@ const page = () => {
     );
 
     const token = res.data.access_token;
+    const role = res.data.role;
     sessionStorage.setItem("token", token);
-    const store =  sessionStorage.getItem("token");
-    console.log("store", store);
-    console.log("token", token);
+    sessionStorage.setItem("role", role);
+    
     if (token) {
       router.push("/");
     }

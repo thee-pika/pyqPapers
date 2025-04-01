@@ -27,6 +27,30 @@ const s3Client = new S3Client({
 
 const S3_BUCKET = process.env.BUCKET;
 
+pyqRouter.post("/get-paper", async (req, res) => {
+  try {
+    const { combination, subject, semester } = req.body.data;
+
+    const pyqPapers = await prisma.pyqPaper.findMany({
+      where: {
+        combination,
+        subject,
+        semester,
+      },
+    });
+ 
+    if (!pyqPapers) {
+      res.status(500).json({ message: "no paper found!!" });
+      return;
+    }
+
+    res.send({ pyqPapers });
+  } catch (error) {
+    console.log("error", error);
+    res.status(500).json({ message: "error occurd", error });
+  }
+});
+
 pyqRouter.post("/upload-image", upload.single("image"), async (req, res) => {
   try {
     const file = req.file;
@@ -196,7 +220,6 @@ pyqRouter.put("/:id", AuthMiddleware, isAdmin, async (req, res) => {
     });
 
     res.send({ updatedPaper });
-
   } catch (error) {
     res.status(500).json({ message: "error occurd", error });
   }
@@ -221,7 +244,7 @@ pyqRouter.delete("/:id", AuthMiddleware, isAdmin, async (req, res) => {
       return;
     }
 
-    if(!S3_BUCKET || !pyqPaper.imageUrl) {
+    if (!S3_BUCKET || !pyqPaper.imageUrl) {
       res.status(500).json({ message: "credentials not found!!" });
       return;
     }
@@ -240,7 +263,6 @@ pyqRouter.delete("/:id", AuthMiddleware, isAdmin, async (req, res) => {
     });
 
     res.send({ message: "pyqPaper deleted successfully!!" });
-
   } catch (error) {
     res.status(500).json({ message: "error occurd", error });
   }

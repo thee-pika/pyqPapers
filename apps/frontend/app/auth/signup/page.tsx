@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 import { config } from "dotenv";
+import { useRouter } from "next/navigation";
 config();
 
 const SignUp = () => {
+  const router = useRouter();
   const [signupCred, setSignupCred] = useState({
     username: "",
     email: "",
@@ -30,6 +32,9 @@ const SignUp = () => {
       }
     );
 
+    if(res.status === 200) {
+      router.push("/");
+    }
     console.log("res", res);
   };
   return (

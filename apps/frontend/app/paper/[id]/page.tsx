@@ -21,12 +21,12 @@ const PaperById = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [token, settoken] = useState<string>("");
+  const [menuOpen, setmenuOpen] = useState<boolean>(false);
   const [paper, setPaper] = useState<Paper>();
   const router = useRouter();
 
   useEffect(() => {
     const Token = sessionStorage.getItem("token");
-    console.log("tokennnnnnnnnnnnnnnnnnn", Token);
 
     if (Token) {
       settoken(Token);
@@ -49,8 +49,6 @@ const PaperById = () => {
         }
       );
 
-      console.log("ressssssssssssss", res);
-
       setPaper(res.data.pyqPaper);
     } catch (err) {
       setLoading(false);
@@ -59,25 +57,25 @@ const PaperById = () => {
     }
   };
 
-  //   if (loading) {
-  //     return <div>Loading.........</div>;
-  //   }
+  if (loading) {
+    return <div>Loading.........</div>;
+  }
 
   const handleDelete = async () => {
     const res = await axios.delete(
-        `${process.env.NEXT_PUBLIC_BACKEND_URI}/api/v1/paper/${id}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if(res.status === 200) {
-        alert("DEleteed Succssfully!!");
-        router.push("/");
+      `${process.env.NEXT_PUBLIC_BACKEND_URI}/api/v1/paper/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       }
-  }
+    );
+    if (res.status === 200) {
+      alert("DEleteed Succssfully!!");
+      router.push("/");
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6">
@@ -88,7 +86,6 @@ const PaperById = () => {
           </h1>
 
           <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-4xl">
-       
             <div className="relative w-full h-[500px] mb-6">
               <Image
                 src={paper.psurl}
@@ -101,30 +98,38 @@ const PaperById = () => {
 
             <div className="text-center">
               <div className="flex justify-between">
-              <p className="text-lg text-gray-700">
-                <span className="font-semibold">Subject:</span>{" "}
-                {paper.subject.replace("_", " ")}
-              </p>
-              <p className="text-lg text-gray-700">
-                <span className="font-semibold">Semester:</span>{" "}
-                {paper.semester}
-              </p>
+                <p className="text-lg text-gray-700">
+                  <span className="font-semibold">Subject:</span>{" "}
+                  {paper.subject.replace("_", " ")}
+                </p>
+                <p className="text-lg text-gray-700">
+                  <span className="font-semibold">Semester:</span>{" "}
+                  {paper.semester}
+                </p>
               </div>
               <div className="flex justify-between">
-              <p className="text-lg text-gray-700">
-                <span className="font-semibold">Combination:</span>{" "}
-                {paper.combination}
-              </p>
-              <p className="text-lg text-gray-700">
-                <span className="font-semibold">Year:</span> {paper.year}
-              </p>
+                <p className="text-lg text-gray-700">
+                  <span className="font-semibold">Combination:</span>{" "}
+                  {paper.combination}
+                </p>
+                <p className="text-lg text-gray-700">
+                  <span className="font-semibold">Year:</span> {paper.year}
+                </p>
               </div>
             </div>
+            
             <div>
-                <Link href={`/paper/edit/${paper.id}`}>
-                <button className="bg-purple-700 p-4 px-8 rounded-md text-white font-bold cursor-pointer">Edit</button>
-                </Link>
-                <button className="bg-red-700 p-4 px-8 rounded-md text-white font-bold ml-12 cursor-pointer" onClick={handleDelete}>Delete</button>
+              <Link href={`/paper/edit/${paper.id}`}>
+                <button className="bg-purple-700 p-4 px-8 rounded-md text-white font-bold cursor-pointer">
+                  Edit
+                </button>
+              </Link>
+              <button
+                className="bg-red-700 p-4 px-8 rounded-md text-white font-bold ml-12 cursor-pointer"
+                onClick={handleDelete}
+              >
+                Delete
+              </button>
             </div>
           </div>
         </>
