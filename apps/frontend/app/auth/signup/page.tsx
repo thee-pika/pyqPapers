@@ -4,6 +4,7 @@ import Link from "next/link";
 import axios from "axios";
 import { config } from "dotenv";
 import { useRouter } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
 config();
 
 const SignUp = () => {
@@ -33,10 +34,15 @@ const SignUp = () => {
     );
 
     if(res.status === 200) {
-      router.push("/");
+      toast.success("LoggedOut Successfully!!");
+    
+      setTimeout(() => {
+        router.push("/");
+      }, 1000);
     }
-    console.log("res", res);
+
   };
+
   return (
     <>
       <section className="bg-gray-50 dark:bg-gray-900">
@@ -123,6 +129,7 @@ const SignUp = () => {
               </form>
             </div>
           </div>
+          <Toaster/>
         </div>
       </section>
     </>

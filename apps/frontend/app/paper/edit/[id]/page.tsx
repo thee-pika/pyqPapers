@@ -2,9 +2,9 @@
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
 import Dropdown from "@/app/components/DropDown";
+import MoonLoader from "react-spinners/MoonLoader";
+import toast, { Toaster } from "react-hot-toast";
 
 interface Paper {
   id: string;
@@ -82,8 +82,11 @@ const EditPyqPaper = () => {
       settoken(Token);
       getPaperDetails(Token);
     } else {
-      alert("Please login to continue");
-      router.push("/auth/login");
+      toast.error("Please login to continue");
+
+      setTimeout(() => {
+        router.push("/auth/login");
+      }, 1000);
     }
   }, []);
 
@@ -99,7 +102,6 @@ const EditPyqPaper = () => {
         }
       );
 
-      console.log("ressssssssssssss", res);
       const data = res.data.pyqPaper;
       setImageUrl(data.psurl);
       setPyqDetails({
@@ -118,61 +120,74 @@ const EditPyqPaper = () => {
   };
 
   if (loading) {
-    return <div>Loading.........</div>;
+    return (
+      <div className="flex justify-center items-center h-[70vh]">
+        <MoonLoader 
+        color="#8200DB"
+        size={90}
+        loading={loading}
+        />
+      </div>
+    );
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-    let url;
-    if (file) {
-      console.log("file selected");
-      formData.append("image", file);
-
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URI}/api/v1/paper/upload-image`,
+    try {
+      e.preventDefault();
+  
+      const formData = new FormData();
+      let url;
+      if (file) {
+  
+        formData.append("image", file);
+  
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URI}/api/v1/paper/upload-image`,
+          {
+            method: "POST",
+            body: formData,
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+  
+        const data = await res.json();
+        url = data.url;
+  
+      }
+  
+      const data = {
+        title: pyqDetails.title,
+        year: parseInt(pyqDetails.year),
+        subject: pyqDetails.subject,
+        combination: pyqDetails.combination,
+        semester: pyqDetails.semester,
+        psurl: url ? url : imageUrl,
+      };
+  
+      const res = await axios.put(
+        `${process.env.NEXT_PUBLIC_BACKEND_URI}/api/v1/paper/${id}`,
         {
-          method: "POST",
-          body: formData,
+          data,
+        },
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      console.log("resssssssssssss", res);
-      const data = await res.json();
-      url = data.url;
-      console.log("urrrrrrrrrrrr", url);
-    }
-
-    console.log("file not selected");
-
-    const data = {
-      title: pyqDetails.title,
-      year: parseInt(pyqDetails.year),
-      subject: pyqDetails.subject,
-      combination: pyqDetails.combination,
-      semester: pyqDetails.semester,
-      psurl: url ? url : imageUrl,
-    };
-    
-    console.log("dataaaaaaaaaaaaaaaaaa", data);
-
-    const res = await axios.put(
-      `${process.env.NEXT_PUBLIC_BACKEND_URI}/api/v1/paper/${id}`,
-      {
-        data,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+  
+      if (res.status === 200) {
+        toast.error("PyqPaper Updated Successfully!!");
+  
+        setTimeout(() => {
+          router.push("/");
+        }, 1000);
+  
       }
-    );
-
-    if (res.status === 200) {
-      router.push("/");
+    } catch (error) {
+      toast.error("Error Occured Try after some Time");
     }
   };
 
@@ -298,6 +313,7 @@ const EditPyqPaper = () => {
           </button>
         </form>
       </div>
+      <Toaster />
     </section>
   );
 };

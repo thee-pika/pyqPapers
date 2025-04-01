@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const MainPage = () => {
   const [clickedComb, setClickedComb] = useState<keyof typeof subjects>("BSC");
@@ -23,7 +23,9 @@ const MainPage = () => {
     <div className="flex flex-col lg:flex-row w-full min-h-screen bg-gray-100">
       {/* Sidebar */}
       <div className="w-full lg:w-1/5 bg-purple-700 text-white p-6 mb-6 lg:mb-0">
-        <h2 className="text-2xl font-bold mb-6 text-center text-white p-4 bg-gray-950">Combinations</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center text-white p-4 bg-gray-950">
+          Combinations
+        </h2>
         {Object.keys(subjects).map((comb) => (
           <div
             className={`bg-gray-800 p-4 mt-2 rounded-md text-center cursor-pointer transition duration-300 ease-in-out hover:bg-purple-600 ${

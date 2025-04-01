@@ -1,6 +1,6 @@
-import { prisma } from "db/client";
+
 import cron from "node-cron";
-import { updateEXpiredUrls } from "../services/urlService";
+import { updateEXpiredUrls } from "../services/urlService.js";
 
 cron.schedule("0 0 * * *", async () => {
  

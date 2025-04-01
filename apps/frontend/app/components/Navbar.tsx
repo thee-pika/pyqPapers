@@ -3,6 +3,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
 import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
@@ -20,14 +21,19 @@ const Navbar = () => {
       }
       setToken(storedToken);
     }
-  }, []);
+  }, [token]);
 
   const handleLogout = () => {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("role");
     setToken(null);
     setIsAdmin(false);
-    router.push("/auth/login");
+
+    toast.success("LoggedOut Successfully!!");
+
+    setTimeout(() => {
+      router.push("/auth/login");
+    }, 1000);
   };
 
   const isLoggedIn = !!token;
@@ -39,7 +45,6 @@ const Navbar = () => {
   return (
     <>
       <div className="h-28 bg-purple-700 flex w-[100vw] justify-between items-center px-6 sm:px-8 md:px-12">
-
         <Link href={"/"}>
           <h1 className="text-gray-50 font-bold text-3xl">PyqPapers</h1>
         </Link>
@@ -86,7 +91,6 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="flex flex-col bg-purple-700 text-white px-6 py-4 space-y-4 lg:hidden">
-        
           {isAdmin && (
             <>
               <Link href="/paper">
@@ -120,6 +124,7 @@ const Navbar = () => {
           )}
         </div>
       )}
+      <Toaster />
     </>
   );
 };

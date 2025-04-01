@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Dropdown from "@/app/components/DropDown";
+import toast, { Toaster } from "react-hot-toast";
 
 const Page = () => {
   const [file, setFile] = useState<File | undefined>();
@@ -10,11 +11,11 @@ const Page = () => {
 
   useEffect(() => {
     const Token = sessionStorage.getItem("token");
-   
+
     if (Token) {
       settoken(Token);
     } else {
-      alert("Please login to continue");
+      toast.error("Please login to continue");
       router.push("/auth/login");
     }
   }, []);
@@ -68,35 +69,42 @@ const Page = () => {
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-
-    formData.append("image", file!); 
-
-    const data = {
-      title: pyqDetails.title,
-      year: parseInt(pyqDetails.year),
-      subject: pyqDetails.subject,
-      combination: pyqDetails.combination,
-      semester: pyqDetails.semester
-    }
-
-    formData.append("form", JSON.stringify(data));
-
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URI}/api/v1/paper`,
-      {
-        method: "POST",
-        body: formData,
-        headers: {
-          Authorization: `Bearer ${token}`  // Pass token in headers
+    try {
+      e.preventDefault();
+  
+      const formData = new FormData();
+  
+      formData.append("image", file!);
+  
+      const data = {
+        title: pyqDetails.title,
+        year: parseInt(pyqDetails.year),
+        subject: pyqDetails.subject,
+        combination: pyqDetails.combination,
+        semester: pyqDetails.semester,
+      };
+  
+      formData.append("form", JSON.stringify(data));
+  
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URI}/api/v1/paper`,
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      if (res.ok) {
+        toast.success("New PyqPaper created Successfully!!");
+        setTimeout(() => {
+          router.push("/");
+        }, 1000);
       }
-      }
-    );
-
-    if(res.ok) {
-      router.push("/");
+    } catch (error) {
+      toast.error("Paper creation failed!!");
     }
   };
 
@@ -215,9 +223,9 @@ const Page = () => {
           </button>
         </form>
       </div>
+      <Toaster />
     </section>
   );
 };
 
 export default Page;
-

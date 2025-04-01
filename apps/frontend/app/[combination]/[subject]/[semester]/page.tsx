@@ -4,6 +4,8 @@ import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Download, Share2 } from "lucide-react";
+import MoonLoader from "react-spinners/MoonLoader";
+import toast, { Toaster } from "react-hot-toast";
 
 interface Paper {
   id: string;
@@ -32,20 +34,20 @@ const GetPyqPaper = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      console.log("API Response:", res.data.pyqPapers);
       setPyqPapers(res.data.pyqPapers);
-    } catch (error) {
-      console.error("Error fetching papers:", error);
+    } catch (error:any) {
+      toast.error("Error fetching papers:", error.msg);
     } finally {
       setLoading(false);
     }
   };
+
   const handleDownload = async (fileUrl: string, fileName: string) => {
     try {
       const response = await fetch(fileUrl, { method: "GET" });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch the file.");
+        toast.error("Failed to fetch the file.");
       }
 
       const blob = await response.blob();
@@ -68,9 +70,9 @@ const GetPyqPaper = () => {
       document.body.removeChild(link);
 
       window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Error downloading file:", error);
-      alert("Failed to download the file.");
+      toast.success(`New File Downloaded!!`)
+    } catch (error:any) {
+      toast.error("Error downloading file:", error.msg);
     }
   };
 
@@ -82,13 +84,13 @@ const GetPyqPaper = () => {
           text: `Check out this paper: ${fileName}`,
           url: fileUrl,
         });
-      } catch (error) {
-        console.error("Error sharing:", error);
+      } catch (error:any) {
+       toast.error("Error sharing:", error.msg);
       }
     } else {
       // Fallback if Web Share API is not supported
       navigator.clipboard.writeText(fileUrl);
-      alert("Link copied to clipboard! Share it manually.");
+      toast.success("Link copied to clipboard! Share it manually.");
     }
   };
 
@@ -97,15 +99,19 @@ const GetPyqPaper = () => {
     if (Token) {
       getPYQPaper(Token);
     } else {
-      alert("Please login to continue");
+      toast.error("Please login to continue");
       router.push("/auth/login");
     }
   }, []);
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600"></div>
+      <div className="flex justify-center items-center h-[70vh]">
+        <MoonLoader 
+        color="#8200DB"
+        size={90}
+        loading={loading}
+        />
       </div>
     );
   }
@@ -165,6 +171,7 @@ const GetPyqPaper = () => {
           No papers found.
         </div>
       )}
+      <Toaster/>
     </section>
   );
 };

@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import MoonLoader from "react-spinners/MoonLoader";
 
 interface Paper {
   id: string;
@@ -41,8 +42,12 @@ const AllPapers = () => {
 
   if (loading) {
     return (
-      <div>
-        <p className="text-center">Loading papers...</p>
+      <div className="flex justify-center items-center h-[70vh]">
+        <MoonLoader 
+        color="#8200DB"
+        size={90}
+        loading={loading}
+        />
       </div>
     );
   }

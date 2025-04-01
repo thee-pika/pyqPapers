@@ -3,6 +3,8 @@ import axios from "axios";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
+
 const page = () => {
   const router = useRouter();
   const [signinCred, setSigninCred] = useState({
@@ -12,28 +14,33 @@ const page = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    console.log("signupCred", signinCred);
-    const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_BACKEND_URI}/api/v1/auth/login`,
-      {
-        email: signinCred.email,
-        password: signinCred.password,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URI}/api/v1/auth/login`,
+        {
+          email: signinCred.email,
+          password: signinCred.password,
         },
-      }
-    );
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    const token = res.data.access_token;
-    const role = res.data.role;
-    sessionStorage.setItem("token", token);
-    sessionStorage.setItem("role", role);
-    
-    if (token) {
-      router.push("/");
+      const token = res.data.access_token;
+      const role = res.data.role;
+      sessionStorage.setItem("token", token);
+      sessionStorage.setItem("role", role);
+
+      if (token) {
+        toast.success("LoggedIn Successfully!!");
+        setTimeout(() => {
+          router.push("/");
+        }, 1000);
+      }
+    } catch (error) {
+      toast.error("Error Occured Try after some Time");
     }
   };
 
@@ -127,6 +134,7 @@ const page = () => {
               </form>
             </div>
           </div>
+          <Toaster />
         </div>
       </section>
     </>

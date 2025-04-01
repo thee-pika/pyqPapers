@@ -4,6 +4,8 @@ import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import MoonLoader from "react-spinners/MoonLoader";
+import toast, { Toaster } from "react-hot-toast";
 
 interface Paper {
   id: string;
@@ -32,8 +34,11 @@ const PaperById = () => {
       settoken(Token);
       getPaperBYId(Token);
     } else {
-      alert("Please login to continue");
-      router.push("/auth/login");
+      toast.error("Please login to continue");
+
+      setTimeout(() => {
+        router.push("/auth/login");
+      }, 1000);
     }
   }, []);
 
@@ -58,7 +63,15 @@ const PaperById = () => {
   };
 
   if (loading) {
-    return <div>Loading.........</div>;
+    return (
+      <div className="flex justify-center items-center h-[70vh]">
+        <MoonLoader 
+        color="#8200DB"
+        size={90}
+        loading={loading}
+        />
+      </div>
+    );
   }
 
   const handleDelete = async () => {
@@ -72,8 +85,11 @@ const PaperById = () => {
       }
     );
     if (res.status === 200) {
-      alert("DEleteed Succssfully!!");
-      router.push("/");
+      toast.success("PyqPaper Deleteed Succssfully!!");
+
+      setTimeout(() => {
+        router.push("/");
+      }, 1000);
     }
   };
 
