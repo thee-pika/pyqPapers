@@ -6,7 +6,7 @@ import { getRefreshTokens } from "../controller/userController.js";
 interface JwtPayloadCustom {
   userId: string;
 }
-
+// 
 export const AuthMiddleware = async (
   req: Request,
   res: Response,
