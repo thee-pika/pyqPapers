@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "tsc -w"
+    "dev": "node dist/index.js"
   },
   "devDependencies": {
     "@types/bun": "latest"
